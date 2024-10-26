@@ -28,8 +28,6 @@ const InterviewList = () => {
           eq(mockInterview.created_by, user?.primaryEmailAddress?.emailAddress)
         )
         .orderBy(desc(mockInterview.created_at));
-
-      console.log(result);
       setInterviewList(result);
     } catch (error) {
       console.error("Error fetching interviews:", error);

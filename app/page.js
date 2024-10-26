@@ -7,7 +7,10 @@ export default function Home() {
     <>
       <Header />
       <Hero />
+      <div className="hidden sm:block" >
       <BusinessCategories />
+      </div>
+
       <FeaturesPlanet />
     </>
   );

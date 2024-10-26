@@ -85,15 +85,8 @@ const RecordAnswerSection = ({
       ", Depends on question and user answer for given interview question. Please give us rating for answer and feedback as area of improvement if any in just 3 to 5 lines in JSON format with rating field and feedback field";
 
     const result = await chatSession.sendMessage(feedbackPrompt);
-    console.log(result);
-    const jsonResponse = JSON.parse(
-      result.response.text().replace("```json", "").replace("```", "")
-    );
-
-    console.log(jsonResponse);
-
+    const jsonResponse = JSON.parse(result.response.text());
     if (existingAnswer) {
-      // If there's an existing answer, update it
       await db
         .update(UserAnswer)
         .set({

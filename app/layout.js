@@ -4,6 +4,7 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import "./css/style.css";
+import { TooltipProvider } from "@/components/ui/tooltip";
 // Local fonts
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,6 +31,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
+       <TooltipProvider>
       <html lang="en">
         <body
           class={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
@@ -38,6 +40,7 @@ export default function RootLayout({ children }) {
         </body>
         <Toaster />
       </html>
+      </TooltipProvider>
     </ClerkProvider>
   );
 }

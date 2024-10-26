@@ -36,8 +36,6 @@ const Interview = ({ params }) => {
                 onUserMediaError={(err) => {
                   setWebCamError(err);
                   setWebcamEnabled(false);
-                  console.log(err);
-                  //NotAllowedError: Permission denied
                 }}
                 className="rounded-lg object-cover w-full h-auto"
                 style={{ width: "100%" }}
