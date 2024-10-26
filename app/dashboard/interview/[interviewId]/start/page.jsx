@@ -14,6 +14,9 @@ import {
   Check,
   Video,
   LoaderCircle,
+  SendHorizontal,
+  VideoOff,
+  MicOff,
 } from "lucide-react";
 import Image from "next/image";
 import Webcam from "react-webcam";
@@ -74,14 +77,19 @@ const StartInterview = ({ params }) => {
       textToSpeech(mockInterviewQuestions[activeQuestionIndex]?.question);
     }
   }, [activeQuestionIndex]);
-
   const updateUserAnswer = (newAnswer) => {
-    const updatedAnswers = [...mockInterviewQuestions];
-    updatedAnswers[activeQuestionIndex] = {
-      ...updatedAnswers[activeQuestionIndex],
-      userAnswer: newAnswer,
-    };
-
+    if (activeQuestionIndex >= mockInterviewQuestions.length) {
+      return;
+    }
+    const updatedAnswers = mockInterviewQuestions.map((question, index) => {
+      if (index === activeQuestionIndex) {
+        return {
+          ...question,
+          userAnswer: newAnswer,
+        };
+      }
+      return question;
+    });
     setMockInterviewQuestions(updatedAnswers);
   };
 
@@ -222,7 +230,6 @@ const StartInterview = ({ params }) => {
                         ? "bg-primary text-white"
                         : "bg-secondary"
                     }`}
-                    onClick={() => setActiveQuestionIndex(index)}
                   >
                     <strong>Question #{index + 1}</strong>
                   </h2>
@@ -326,35 +333,57 @@ const StartInterview = ({ params }) => {
                     )}
                   </ul>
                 </div>
-                <div className="flex items-center justify-center mt-2">
-                  <Input
-                    value={onTextChange}
-                    placeholder={"Enter your answer..."}
-                    onChange={(e) => setOnTextChange(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        updateUserAnswer(onTextChange);
-                        setOnTextChange("");
-                      }
-                    }}
-                  />
-
-                  {!isRecording ? (
-                    <div
-                      className="flex items-center justify-center rounded-full bg-gray-500 text-white p-3 ml-3"
-                      onClick={startSpeechToText}
-                    >
-                      <Mic size={20} />
-                    </div>
-                  ) : (
-                    <div
-                      className="flex items-center justify-center rounded-full bg-red-500 text-white p-3 ml-3"
-                      onClick={stopSpeechToText}
-                    >
-                      <Mic size={20} />
-                    </div>
-                  )}
-                </div>
+                {!mockInterviewQuestions[activeQuestionIndex]?.userAnswer && (
+                  <div className="flex items-center justify-center mt-2">
+                    <Input
+                      value={onTextChange}
+                      placeholder={"Enter your answer..."}
+                      onChange={(e) => {
+                        setOnTextChange(e.target.value);
+                        stopSpeechToText();
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          stopSpeechToText();
+                          updateUserAnswer(onTextChange);
+                          setOnTextChange("");
+                          validateAndMoveNext();
+                        }
+                      }}
+                    />
+                    {onTextChange ? (
+                      <div
+                        className="flex items-center justify-center rounded-full bg-gray-500 text-white p-3 ml-3"
+                        onClick={() => {
+                          stopSpeechToText();
+                          updateUserAnswer(onTextChange);
+                          setOnTextChange("");
+                          validateAndMoveNext();
+                        }}
+                      >
+                        <SendHorizontal />
+                      </div>
+                    ) : (
+                      <>
+                        {!isRecording ? (
+                          <div
+                            className="flex items-center justify-center rounded-full bg-gray-500 text-white p-3 ml-3"
+                            onClick={startSpeechToText}
+                          >
+                            <MicOff size={20} />
+                          </div>
+                        ) : (
+                          <div
+                            className="flex items-center justify-center rounded-full bg-red-500 text-white p-3 ml-3"
+                            onClick={stopSpeechToText}
+                          >
+                            <Mic size={20} />
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+                )}
               </div>
               <div className="flex items-center justify-center h-[450px] flex-col">
                 <div className="flex flex-col items-center justify-center rounded-lg bg-black relative w-full h-full">
@@ -373,37 +402,57 @@ const StartInterview = ({ params }) => {
                   {webcamEnabled && (
                     <Webcam
                       mirrored
+                      onUserMediaError={(err) => {
+                        setWebcamEnabled(false);
+                        const errorMessage = err.name || err.message;
+                        if (errorMessage === "NotAllowedError") {
+                          toast.error("Please allow webcam access.");
+                        } else {
+                          toast.error(
+                            "An error occurred while accessing the webcam."
+                          );
+                        }
+                      }}
                       className="w-full h-full object-cover rounded-lg"
                     />
                   )}
                   <div className="absolute flex gap-5 bottom-5 z-10">
-                    <div
-                      className={`rounded-full p-3 cursor-pointer text-white ${
-                        !webcamEnabled
-                          ? "bg-gray-500 opacity-85"
-                          : "bg-red-500 opacity-85"
-                      }`}
-                      onClick={() => setWebcamEnabled(!webcamEnabled)}
-                    >
-                      <Video size={20} />
-                    </div>
-                    <div
-                      className={`rounded-full p-3 cursor-pointer text-white ${
-                        !isRecording
-                          ? "bg-gray-500 opacity-80"
-                          : "bg-red-500 opacity-80"
-                      }`}
-                      onClick={() => {
-                        isRecording ? stopSpeechToText() : startSpeechToText();
-                      }}
-                    >
-                      <Mic size={20} />
-                    </div>
+                    {!webcamEnabled ? (
+                      <div
+                        className={`rounded-full p-3 cursor-pointer text-white ${"bg-gray-500 opacity-85"}`}
+                        onClick={() => setWebcamEnabled(true)}
+                      >
+                        <VideoOff size={20} />
+                      </div>
+                    ) : (
+                      <div
+                        className={`rounded-full p-3 cursor-pointer text-white ${"bg-red-500 opacity-85"}`}
+                        onClick={() => setWebcamEnabled(false)}
+                      >
+                        <Video size={20} />
+                      </div>
+                    )}
+                    {!isRecording ? (
+                      <div
+                        className={`rounded-full p-3 cursor-pointer text-white ${"bg-gray-500 opacity-80"}`}
+                        onClick={() => {
+                          startSpeechToText();
+                        }}
+                      >
+                        <MicOff size={20} />
+                      </div>
+                    ) : (
+                      <div
+                        className={`rounded-full p-3 cursor-pointer text-white ${"bg-red-500 opacity-80"}`}
+                        onClick={() => stopSpeechToText()}
+                      >
+                        <Mic size={20} />
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             </div>
-
             <div className="flex justify-end gap-6">
               <Button
                 disabled={activeQuestionIndex === 0}

@@ -118,9 +118,9 @@ const AddNewInterview = () => {
       return;
     }
     setLoading(true);
-        if (extractedText) {
-          try {
-            const prompt = `
+    if (extractedText) {
+      try {
+        const prompt = `
             ${extractedText}
             I will give you the resume text above, you need to analyze the first validate the resume by is it resume or some other text if resume is not valid then set the isResumeValdid to false and other  properties as empty string,if resume is valid then job title, job description, and job experience and generate a list of interview 10 non coding questions with answers for the following in a json format, the json format must be like this
     {
@@ -132,42 +132,42 @@ const AddNewInterview = () => {
                  "question":"string",
                   "answer": "string"}]
     }`;
-            const result = await chatSession.sendMessage(prompt);
-            const mockresponse = JSON.parse(result.response.text());
+        const result = await chatSession.sendMessage(prompt);
+        const mockresponse = JSON.parse(result.response.text());
 
-            if (mockresponse) {
-              const resp = await db
-                .insert(mockInterview)
-                .values({
-                  mockId: uuidv4(),
-                  jobPosition: mockresponse.jobPosition,
-                  jobDescription: mockresponse.jobDescription,
-                  jobExperience: mockresponse.jobExperience,
-                  created_by: user.primaryEmailAddress?.emailAddress,
-                })
-                .returning({
-                  mockId: mockInterview.mockId,
-                });
-              await Promise.all(
-                mockresponse?.interviewData?.map(({ question, answer }) =>
-                  db.insert(UserAnswer).values({
-                    mockIdRef: resp[0].mockId,
-                    questionId: uuidv4(),
-                    question,
-                    correctAnswer: answer,
-                    userMail: user.primaryEmailAddress?.emailAddress,
-                  })
-                )
-              );
-              router.push(`/dashboard/interview/${resp[0].mockId}`);
-            } else {
-              toast.error("Failed to generate interview questions.");
-            }
-          } catch (error) {
-            console.error("Text extraction failed: ", error);
-            toast.error(`Error extracting text: ${error.message}`);
-          }
+        if (mockresponse) {
+          const resp = await db
+            .insert(mockInterview)
+            .values({
+              mockId: uuidv4(),
+              jobPosition: mockresponse.jobPosition,
+              jobDescription: mockresponse.jobDescription,
+              jobExperience: mockresponse.jobExperience,
+              created_by: user.primaryEmailAddress?.emailAddress,
+            })
+            .returning({
+              mockId: mockInterview.mockId,
+            });
+          await Promise.all(
+            mockresponse?.interviewData?.map(({ question, answer }) =>
+              db.insert(UserAnswer).values({
+                mockIdRef: resp[0].mockId,
+                questionId: uuidv4(),
+                question,
+                correctAnswer: answer,
+                userMail: user.primaryEmailAddress?.emailAddress,
+              })
+            )
+          );
+          router.push(`/dashboard/interview/${resp[0].mockId}`);
+        } else {
+          toast.error("Failed to generate interview questions.");
         }
+      } catch (error) {
+        console.error("Text extraction failed: ", error);
+        toast.error(`Error extracting text: ${error.message}`);
+      }
+    }
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
