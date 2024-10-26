@@ -304,6 +304,7 @@ const StartInterview = ({ params }) => {
                           onKeyDown={(e) => {
                             if (e.key === "Enter") {
                               setEdit(false);
+                              validateAndMoveNext();
                             }
                           }}
                         />
@@ -312,6 +313,7 @@ const StartInterview = ({ params }) => {
                             className="mt-2"
                             onClick={() => {
                               setEdit(false);
+                              validateAndMoveNext();
                             }}
                           >
                             <Check size={20} />
