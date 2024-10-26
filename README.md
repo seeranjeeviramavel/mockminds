@@ -1,36 +1,87 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Mock Minds
+
+Mock Minds is an AI-powered mock interview platform designed to help users prepare for interviews by providing instant feedback. Built using modern web technologies like Next.js, Tailwind CSS, Clerk for authentication, and Drizzle ORM for database management, Mock Minds offers a seamless user experience for conducting mock interviews and tracking progress.
+
+## Features
+
+- **AI Mock Interview:** Conduct mock interviews with AI-generated questions and receive real-time feedback.
+- **User Authentication:** Secure sign-up and login powered by Clerk.
+- **Question Management:** Dynamically generate and manage questions using Drizzle ORM.
+- **Real-Time Speech Recognition:** Implemented with `react-hook-speech-to-text` for hands-free user responses.
+- **Webcam Integration:** Uses `react-webcam` to simulate real interview settings.
+- **Responsive Design:** Styled using Tailwind CSS with custom animations.
+
+## Tech Stack
+
+- **Frontend:** Next.js, React, Tailwind CSS
+- **Authentication:** Clerk
+- **Database:** Drizzle ORM, Neon (serverless PostgreSQL)
+- **Speech Recognition:** `react-hook-speech-to-text`
+- **UI Components:** Radix UI, TailwindCSS Forms, Shadcn UI
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Node.js (>= 14.x)
+- Neon Database account
+- Clerk account for authentication
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+1. Clone the repository:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    ```bash
+    git clone https://github.com/seeranjeeviramavel/mockminds.git
+    cd mock-minds
+    ```
 
-## Learn More
+2. Install dependencies:
 
-To learn more about Next.js, take a look at the following resources:
+    ```bash
+    npm install
+    ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. Set up environment variables:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+    Create a `.env.local` file in the root directory and add your Clerk and Neon Database credentials:
 
-## Deploy on Vercel
+    ```bash
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
+    CLERK_SECRET_KEY=your_clerk_secret_key
+    NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+    NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+    NEXT_PUBLIC_DRIZZLE_DB_URL=your_neon_db_url
+    NEXT_PUBLIC_MAX_QUESTIONS=10
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Run the development server:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+    ```bash
+    npm run dev
+    ```
+
+5. Open [http://localhost:3000](http://localhost:3000) to view the application.
+
+## Usage
+
+1. Register or log in using Clerk.
+2. Start a mock interview session and answer questions using speech or text input.
+3. Review feedback after each question and improve your performance.
+
+## Contributing
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature-branch`).
+3. Make your changes.
+4. Commit your changes (`git commit -am 'Add new feature'`).
+5. Push to the branch (`git push origin feature-branch`).
+6. Create a new Pull Request.
+
+## License
+
+This project is licensed under the MIT License. See the LICENSE file for more details.
+
+## Contact
+
+For any inquiries or issues, please reach out to seeranjeeviramavel@gmail.com.
