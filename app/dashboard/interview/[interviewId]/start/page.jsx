@@ -30,7 +30,7 @@ const StartInterview = ({ params }) => {
   const router = useRouter();
   const [interviewData, setInterviewData] = useState({});
   const [mockInterviewQuestions, setMockInterviewQuestions] = useState([]);
-  const [activeQuestionIndex, setActiveQuestionIndex] = useState(0);
+  const [activeQuestionIndex, setActiveQuestionIndex] = useState(null);
   const [loading, setLoading] = useState(false);
   const [edit, setEdit] = useState(false);
   const [onTextChange, setOnTextChange] = useState("");
@@ -104,8 +104,6 @@ const StartInterview = ({ params }) => {
     }
   };
 
-
-
   const textToSpeech = (text) => {
     if (!window.speechSynthesis) {
       alert("Speech Synthesis Not Supported");
@@ -135,6 +133,7 @@ const StartInterview = ({ params }) => {
         .where(eq(mockInterview.mockId, params.interviewId));
       setInterviewData(userDetails[0]);
       setMockInterviewQuestions(interview);
+      setActiveQuestionIndex(0);
       GetExistingAnswer(interview[0].mockId);
     } catch (error) {
       console.error("Error fetching interview details:", error);
@@ -213,21 +212,24 @@ const StartInterview = ({ params }) => {
       ) : (
         <>
           <div className="my-8">
-            <div className="grid grid-flow-col-dense gap-5 my-4">
-              {mockInterviewQuestions?.map((question, index) => (
-                <h2
-                  key={index}
-                  className={`p-2 rounded-full text-xs md:text-sm text-center cursor-pointer ${
-                    activeQuestionIndex === index
-                      ? "bg-primary text-white"
-                      : "bg-secondary"
-                  }`}
-                  onClick={() => setActiveQuestionIndex(index)}
-                >
-                  <strong>Question #{index + 1}</strong>
-                </h2>
-              ))}
+            <div className="overflow-x-auto my-4">
+              <div className="grid grid-flow-col-dense gap-5">
+                {mockInterviewQuestions?.map((question, index) => (
+                  <h2
+                    key={index}
+                    className={`p-2 rounded-full text-nowrap text-xs md:text-sm text-center cursor-pointer ${
+                      activeQuestionIndex === index
+                        ? "bg-primary text-white"
+                        : "bg-secondary"
+                    }`}
+                    onClick={() => setActiveQuestionIndex(index)}
+                  >
+                    <strong>Question #{index + 1}</strong>
+                  </h2>
+                ))}
+              </div>
             </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 mb-3">
               <div className="p-5 border rounded-lg h-[450px] flex flex-col">
                 <div className="flex-grow overflow-y-auto">
@@ -241,8 +243,7 @@ const StartInterview = ({ params }) => {
                     </span>
 
                     <Volume2
-                      size={24}
-                      className="cursor-pointer ml-3"
+                      className="cursor-pointer ml-3 text-xl sm:text-2xl md:text-3xl"
                       onClick={() =>
                         textToSpeech(
                           mockInterviewQuestions[activeQuestionIndex]?.question

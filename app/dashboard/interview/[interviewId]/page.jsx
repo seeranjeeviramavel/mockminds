@@ -27,7 +27,7 @@ const Interview = ({ params }) => {
     <div className="my-10  flex-col">
       <h2 className="font-bold text-2xl mb-5">Let's Get Started</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 min-h-96">
-        <div className="flex flex-col items-center justify-center relative rounded-lg  bg-black">
+        <div className="flex flex-col items-center justify-center relative rounded-lg bg-black w-full h-96">
           {webcamEnabled ? (
             <>
               <Webcam
@@ -39,7 +39,7 @@ const Interview = ({ params }) => {
                   console.log(err);
                   //NotAllowedError: Permission denied
                 }}
-                className="rounded-lg"
+                className="rounded-lg object-cover w-full h-auto"
                 style={{ width: "100%" }}
               />
             </>
@@ -50,13 +50,13 @@ const Interview = ({ params }) => {
               </Button>
             </>
           )}
-          <div className="absolute top-5 left-5 text-white">
+          <div className="absolute top-5 left-5 text-white text-sm md:text-lg">
             {interviewData.jobPosition} - {interviewData.jobExperience}
             {interviewData.jobExperience == 1 ? "year" : "years"}
           </div>
           <div className="absolute flex gap-5 bottom-5">
             <div
-              className={`rounded-full  p-3 cursor-pointer text-white  ${
+              className={`rounded-full p-3 cursor-pointer text-white  ${
                 webcamEnabled ? "bg-primary " : "bg-red-500"
               }`}
               onClick={() => setWebcamEnabled(!webcamEnabled)}
@@ -73,22 +73,8 @@ const Interview = ({ params }) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col my-5 gap-5 items-center justify-center ">
-          {/* <div className="flex flex-col gap-5 p-5 rounded-lg border">
-            <h2 className="text-lg">
-              <strong>Job Role/Job Position:</strong>
-              {interviewData.jobPosition}
-            </h2>
-            <h2 className="text-lg">
-              <strong>Job Description:</strong>
-              {interviewData.jobDescription}
-            </h2>
-            <h2 className="text-lg">
-              <strong>Job Experience:</strong>
-              {interviewData.jobExperience}
-            </h2>
-          </div> */}
 
+        <div className="flex flex-col my-5 gap-5 items-center justify-center ">
           <h2 className="text-2xl">Ready to Start Interview?</h2>
           <Link
             className=""

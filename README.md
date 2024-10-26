@@ -1,12 +1,12 @@
 # Mock Minds
 
-Mock Minds is an AI-powered mock interview platform designed to help users prepare for interviews by providing instant feedback. Built using modern web technologies like Next.js, Tailwind CSS, Clerk for authentication, and Drizzle ORM for database management, Mock Minds offers a seamless user experience for conducting mock interviews and tracking progress.
+Mock Minds is an AI-powered mock interview platform designed to help users prepare for interviews by providing instant feedback. The platform utilizes modern technologies like Next.js, Tailwind CSS, Clerk for authentication, and Drizzle ORM for database management. Additionally, Mock Minds integrates the **Gemini API** for generating interview questions and providing intelligent feedback based on user responses.
 
 ## Features
 
-- **AI Mock Interview:** Conduct mock interviews with AI-generated questions and receive real-time feedback.
+- **AI Mock Interview:** Conduct mock interviews with AI-generated questions using the Gemini API and receive real-time feedback.
 - **User Authentication:** Secure sign-up and login powered by Clerk.
-- **Question Management:** Dynamically generate and manage questions using Drizzle ORM.
+- **Question & Feedback Generation:** Leverage the Gemini API to dynamically generate interview questions and provide detailed feedback.
 - **Real-Time Speech Recognition:** Implemented with `react-hook-speech-to-text` for hands-free user responses.
 - **Webcam Integration:** Uses `react-webcam` to simulate real interview settings.
 - **Responsive Design:** Styled using Tailwind CSS with custom animations.
@@ -16,6 +16,7 @@ Mock Minds is an AI-powered mock interview platform designed to help users prepa
 - **Frontend:** Next.js, React, Tailwind CSS
 - **Authentication:** Clerk
 - **Database:** Drizzle ORM, Neon (serverless PostgreSQL)
+- **AI Question & Feedback:** Gemini API
 - **Speech Recognition:** `react-hook-speech-to-text`
 - **UI Components:** Radix UI, TailwindCSS Forms, Shadcn UI
 
@@ -26,13 +27,14 @@ Mock Minds is an AI-powered mock interview platform designed to help users prepa
 - Node.js (>= 14.x)
 - Neon Database account
 - Clerk account for authentication
+- Access to Gemini API
 
 ### Installation
 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/seeranjeeviramavel/mockminds.git
+    git clone https://github.com/your-username/mock-minds.git
     cd mock-minds
     ```
 
@@ -44,7 +46,7 @@ Mock Minds is an AI-powered mock interview platform designed to help users prepa
 
 3. Set up environment variables:
 
-    Create a `.env.local` file in the root directory and add your Clerk and Neon Database credentials:
+    Create a `.env.local` file in the root directory and add your Clerk, Neon Database, and Gemini API credentials:
 
     ```bash
     NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
@@ -52,6 +54,7 @@ Mock Minds is an AI-powered mock interview platform designed to help users prepa
     NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
     NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
     NEXT_PUBLIC_DRIZZLE_DB_URL=your_neon_db_url
+    GEMINI_API_KEY=your_gemini_api_key
     NEXT_PUBLIC_MAX_QUESTIONS=10
     ```
 
@@ -66,8 +69,9 @@ Mock Minds is an AI-powered mock interview platform designed to help users prepa
 ## Usage
 
 1. Register or log in using Clerk.
-2. Start a mock interview session and answer questions using speech or text input.
-3. Review feedback after each question and improve your performance.
+2. Start a mock interview session where questions are generated dynamically by the Gemini API.
+3. Answer questions using speech or text input.
+4. Review feedback provided by the Gemini API after each question and improve your performance.
 
 ## Contributing
 

@@ -10,6 +10,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { chatSession } from "@/utils/AIModel";
@@ -20,6 +28,8 @@ import { useUser } from "@clerk/nextjs";
 import { v4 as uuidv4 } from "uuid";
 import moment from "moment";
 import { useRouter } from "next/navigation";
+import { FilePond } from "react-filepond";
+import "filepond/dist/filepond.min.css";
 const AddNewInterview = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -29,6 +39,7 @@ const AddNewInterview = () => {
     jobExperience: "",
   });
   const [jsonResponse, setJsonResponse] = useState([]);
+  const [files, setFiles] = useState([]);
   const router = useRouter();
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -115,69 +126,116 @@ Job Position : ${formData.jobPosition}, Job Description: ${formData.jobDescripti
             <DialogTitle className="font-bold text-2xl">
               Tell us more about your job interview
             </DialogTitle>
+
             <DialogDescription>
-              <form onSubmit={handleSubmit}>
-                <div>
-                  <h2>
-                    Add Details about your job position/role, Job Description,
-                    and the years of experience you have
-                  </h2>
-                  <div>
-                    <div className="my-3">
-                      <label>Job Role / Job Position</label>
-                      <Input
-                        name="jobPosition"
-                        placeholder="Ex. Software Engineer"
-                        value={formData.jobPosition}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
+              <Carousel>
+                <CarouselContent>
+                  <CarouselItem>
+                    {" "}
+                    <form onSubmit={handleSubmit}>
+                      <div>
+                        <h2>
+                          Add Details about your job position/role, Job
+                          Description, and the years of experience you have
+                        </h2>
+                        <div>
+                          <div className="my-3">
+                            <label>Job Role / Job Position</label>
+                            <Input
+                              name="jobPosition"
+                              placeholder="Ex. Software Engineer"
+                              value={formData.jobPosition}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
 
-                    <div className="my-3">
-                      <label>Job Description</label>
-                      <Textarea
-                        name="jobDescription"
-                        placeholder="Ex. I am a software engineer"
-                        value={formData.jobDescription}
-                        onChange={handleChange}
-                        required
-                      />
-                    </div>
+                          <div className="my-3">
+                            <label>Job Description</label>
+                            <Textarea
+                              name="jobDescription"
+                              placeholder="Ex. I am a software engineer"
+                              value={formData.jobDescription}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
 
-                    <div className="my-3">
-                      <label>Years of Experience</label>
-                      <Input
-                        name="jobExperience"
-                        placeholder="Ex. 5"
-                        type="number"
-                        value={formData.jobExperience}
-                        onChange={handleChange}
-                        required
+                          <div className="my-3">
+                            <label>Years of Experience</label>
+                            <Input
+                              name="jobExperience"
+                              placeholder="Ex. 5"
+                              type="number"
+                              value={formData.jobExperience}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                        </div>
+                        <div className="flex justify-end gap-3">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            type="button"
+                            onClick={() => {
+                              setOpen(false);
+                              setLoading(false);
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                          <Button size="sm" type="submit" disabled={loading}>
+                            {loading && (
+                              <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                            )}
+                            Start Interview
+                          </Button>
+                        </div>
+                      </div>
+                    </form>
+                  </CarouselItem>
+                  <CarouselItem>
+                    <>
+                      <div className="mb-3">
+                        <h2>
+                          Add Details about your job position/role, Job
+                          Description, and the years of experience you have
+                        </h2>
+                      </div>
+                      <FilePond
+                        className="my-3"
+                        files={files}
+                        onupdatefiles={setFiles}
+                        allowMultiple={false}
+                        name="files"
+                        labelIdle='Drag & Drop your Resume or <span class="filepond--label-action">Browse</span>'
                       />
-                    </div>
-                  </div>
-                  <div className="flex justify-end gap-3">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      type="button"
-                      onClick={() => {
-                        setOpen(false);
-                        setLoading(false);
-                      }}
-                    >
-                      Cancel
-                    </Button>
-                    <Button size="sm" type="submit" disabled={loading}>
-                      {loading && (
-                        <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
-                      )}
-                      Start Interview
-                    </Button>
-                  </div>
-                </div>
-              </form>
+                      <div className="flex align-bottom justify-end gap-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          type="button"
+                          onClick={() => {
+                            setOpen(false);
+                            setLoading(false);
+                          }}
+                        >
+                          Cancel
+                        </Button>
+                        <Button size="sm" type="submit" disabled={loading}>
+                          {loading && (
+                            <LoaderCircle className="mr-2 h-4 w-4 animate-spin" />
+                          )}
+                          Start Interview
+                        </Button>
+                      </div>
+                    </>
+                  </CarouselItem>
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
